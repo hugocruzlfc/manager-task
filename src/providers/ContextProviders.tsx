@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { GlobalProvider } from "@/context";
+import { Toaster } from "react-hot-toast";
 
 export interface ContextProvidersProps {
   children: React.ReactNode;
@@ -25,5 +26,10 @@ export const ContextProviders: React.FC<ContextProvidersProps> = ({
       </div>
     );
   }
-  return <GlobalProvider>{children}</GlobalProvider>;
+  return (
+    <GlobalProvider>
+      <Toaster />
+      {children}
+    </GlobalProvider>
+  );
 };

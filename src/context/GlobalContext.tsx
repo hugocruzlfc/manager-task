@@ -1,6 +1,6 @@
 "use client";
 import { themes } from "@/content";
-import { Theme, UpdateTheme } from "@/type";
+import { Theme, UpdateTheme } from "@/types";
 import React, { createContext, useContext, useState } from "react";
 
 export const GlobalContext = createContext<Theme | null>(null);

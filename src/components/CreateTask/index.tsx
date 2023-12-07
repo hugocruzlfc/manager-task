@@ -1,21 +1,77 @@
 "use client";
-import React, { useState } from "react";
+import React, { useReducer } from "react";
 import styled from "styled-components";
+import axios from "axios";
 import { Button } from "../Button";
 import { useGlobalState } from "@/context";
 import { add } from "@/utils";
+import { formReducer } from "@/reducers";
+import { ActionFormReducerNames } from "@/types";
+import toast from "react-hot-toast";
+
+const FORM_INITIAL_STATE = {
+  title: "",
+  description: "",
+  date: "",
+  completed: false,
+  important: false,
+};
 
 export const CreateTask: React.FC = () => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [date, setDate] = useState("");
-  const [completed, setCompleted] = useState(false);
-  const [important, setImportant] = useState(false);
-
+  const [state, dispatch] = useReducer(formReducer, FORM_INITIAL_STATE);
   const theme = useGlobalState();
-  const handleChange = (name: string) => (e: any) => {};
 
-  const handleSubmit = async (e: any) => {};
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    switch (e.target?.name) {
+      case "title":
+        dispatch({
+          type: ActionFormReducerNames.SET_TITLE,
+          payload: e.target.value,
+        });
+        break;
+      case "description":
+        dispatch({
+          type: ActionFormReducerNames.SET_DESCRIPTION,
+          payload: e.target.value,
+        });
+        break;
+      case "date":
+        dispatch({
+          type: ActionFormReducerNames.SET_DATE,
+          payload: e.target.value,
+        });
+        break;
+      case "completed":
+        dispatch({
+          type: ActionFormReducerNames.SET_COMPLETED,
+          payload: e.target.value,
+        });
+        break;
+      case "important":
+        dispatch({
+          type: ActionFormReducerNames.SET_IMPORTANT,
+          payload: e.target.value,
+        });
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    const newTask = state;
+    try {
+      const res = await axios.post("/api/tasks", newTask);
+      if (res.data.error) toast.error(res.data.error);
+      toast.success("Task created successfully.");
+    } catch (err) {
+      console.log(`Error in CreateTask.tsx: ${err}`);
+      toast.error("Something went wrong, please try again.");
+    }
+  };
   return (
     <CreateContentStyled
       onSubmit={handleSubmit}
@@ -27,17 +83,17 @@ export const CreateTask: React.FC = () => {
         <input
           type="text"
           id="title"
-          value={title}
+          value={state.title}
           name="title"
-          onChange={handleChange("title")}
+          onChange={handleChange}
           placeholder="e.g, Watch a video from Fireship."
         />
       </div>
       <div className="input-control">
         <label htmlFor="description">Description</label>
         <textarea
-          value={description}
-          onChange={handleChange("description")}
+          value={state.description}
+          onChange={handleChange}
           name="description"
           id="description"
           rows={4}
@@ -47,8 +103,8 @@ export const CreateTask: React.FC = () => {
       <div className="input-control">
         <label htmlFor="date">Date</label>
         <input
-          value={date}
-          onChange={handleChange("date")}
+          value={state.date}
+          onChange={handleChange}
           type="date"
           name="date"
           id="date"
@@ -57,8 +113,8 @@ export const CreateTask: React.FC = () => {
       <div className="input-control toggler">
         <label htmlFor="completed">Toggle Completed</label>
         <input
-          value={completed.toString()}
-          onChange={handleChange("completed")}
+          value={state.completed.toString()}
+          onChange={handleChange}
           type="checkbox"
           name="completed"
           id="completed"
@@ -67,8 +123,8 @@ export const CreateTask: React.FC = () => {
       <div className="input-control toggler">
         <label htmlFor="important">Toggle Important</label>
         <input
-          value={important.toString()}
-          onChange={handleChange("important")}
+          value={state.important.toString()}
+          onChange={handleChange}
           type="checkbox"
           name="important"
           id="important"
