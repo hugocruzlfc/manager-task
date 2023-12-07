@@ -1,5 +1,5 @@
 "use client";
-import React, { useReducer } from "react";
+import React, { ReactEventHandler, useReducer } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { Button } from "../Button";
@@ -46,13 +46,13 @@ export const CreateTask: React.FC = () => {
       case "completed":
         dispatch({
           type: ActionFormReducerNames.SET_COMPLETED,
-          payload: e.target.value,
+          payload: (e.target as HTMLInputElement).checked,
         });
         break;
       case "important":
         dispatch({
           type: ActionFormReducerNames.SET_IMPORTANT,
-          payload: e.target.value,
+          payload: (e.target as HTMLInputElement).checked,
         });
         break;
       default:
@@ -60,12 +60,18 @@ export const CreateTask: React.FC = () => {
     }
   };
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const newTask = state;
+
     try {
       const res = await axios.post("/api/tasks", newTask);
-      if (res.data.error) toast.error(res.data.error);
+
+      console.log(res);
+      if (res.data.error) {
+        toast.error(res.data.error);
+        return;
+      }
       toast.success("Task created successfully.");
     } catch (err) {
       console.log(`Error in CreateTask.tsx: ${err}`);

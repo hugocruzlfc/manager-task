@@ -3,7 +3,7 @@
 ```bash
 yarn add styled-components
 yarn add @clerk/nextjs
-yarn add @prisma/client prisma@latest
+yarn add prisma --dev
 yarn add axios
 yarn add react-hot-toast
 ```
@@ -11,6 +11,8 @@ yarn add react-hot-toast
 # using Prisma
 
 ```bash
-npx prisma init --datasource-provider mongodb
-npx prisma generate
+yarn prisma init --datasource-provider mongodb
+yarn prisma generate
+yarn prisma db push
+
 ```
