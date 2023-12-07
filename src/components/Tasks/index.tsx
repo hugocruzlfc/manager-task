@@ -2,6 +2,7 @@
 import { useGlobalState } from "@/context";
 import React from "react";
 import styled from "styled-components";
+import { CreateTask } from "../CreateTask";
 
 export interface TasksProps {
   // title: string;
@@ -13,7 +14,11 @@ export interface TasksProps {
 // }
 export const Tasks: React.FC<TasksProps> = () => {
   const theme = useGlobalState();
-  return <TasksStyled theme={theme}></TasksStyled>;
+  return (
+    <TasksStyled theme={theme}>
+      <CreateTask />
+    </TasksStyled>
+  );
 };
 
 const TasksStyled = styled.main`

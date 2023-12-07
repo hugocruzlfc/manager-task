@@ -19,5 +19,5 @@ model Task {
   isImportant Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  userid      String
+  userId      String
 }
