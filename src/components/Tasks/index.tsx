@@ -4,11 +4,14 @@ import React from "react";
 import styled from "styled-components";
 
 export interface TasksProps {
-  title: string;
-  tasks: any[];
+  // title: string;
+  // tasks: any[];
 }
 
-export const Tasks: React.FC<TasksProps> = ({ title, tasks }) => {
+// {
+//   title, tasks;
+// }
+export const Tasks: React.FC<TasksProps> = () => {
   const theme = useGlobalState();
   return <TasksStyled theme={theme}></TasksStyled>;
 };

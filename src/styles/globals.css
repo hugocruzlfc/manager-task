@@ -17,9 +17,10 @@
 }
 
 body {
-  color: #fff;
   background-color: #181818;
-  font-zize: 17px;
+  font-size: 17px;
+  color: #fff;
+
   height: 100vh;
 }
 
