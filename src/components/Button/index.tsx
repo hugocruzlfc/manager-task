@@ -30,7 +30,7 @@ export const Button: React.FC<ButtonProps> = ({
   border,
   color,
 }) => {
-  const theme = useGlobalState();
+  const { theme } = useGlobalState();
   return (
     <ButtonStyled
       type={type}

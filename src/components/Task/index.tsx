@@ -1,5 +1,6 @@
 "use client";
-import { useGlobalState } from "@/context";
+import { useGlobalState, useGlobalUpdate } from "@/context";
+import { edit, formatDate, trash } from "@/utils";
 import React from "react";
 import styled from "styled-components";
 
@@ -18,8 +19,45 @@ export const Task: React.FC<TaskProps> = ({
   isCompleted,
   id,
 }) => {
-  const theme = useGlobalState();
-  return <TaskStyled theme={theme}>task</TaskStyled>;
+  const { theme } = useGlobalState();
+  const { deleteTask, updateTask } = useGlobalUpdate();
+  return (
+    <TaskStyled theme={theme}>
+      <h1>{title}</h1>
+      <p>{description}</p>
+      <p className="date">{formatDate(date)}</p>
+      <div className="task-footer">
+        {isCompleted ? (
+          <button
+            className="completed"
+            onClick={() => {
+              updateTask(id, !isCompleted);
+            }}
+          >
+            Completed
+          </button>
+        ) : (
+          <button
+            className="incomplete"
+            onClick={() => {
+              updateTask(id, !isCompleted);
+            }}
+          >
+            Incomplete
+          </button>
+        )}
+        <button className="edit">{edit}</button>
+        <button
+          className="delete"
+          onClick={() => {
+            deleteTask(id);
+          }}
+        >
+          {trash}
+        </button>
+      </div>
+    </TaskStyled>
+  );
 };
 
 const TaskStyled = styled.div`

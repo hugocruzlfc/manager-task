@@ -19,7 +19,7 @@ const FORM_INITIAL_STATE = {
 
 export const CreateTask: React.FC = () => {
   const [state, dispatch] = useReducer(formReducer, FORM_INITIAL_STATE);
-  const theme = useGlobalState();
+  const { theme } = useGlobalState();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

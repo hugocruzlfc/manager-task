@@ -1,22 +1,53 @@
 "use client";
-import { useGlobalState } from "@/context";
 import React from "react";
+import { useGlobalState, useGlobalUpdate } from "@/context";
 import styled from "styled-components";
 import { CreateTask } from "../CreateTask";
+import { Task } from "@prisma/client";
+import { Task as TaskItem } from "../Task";
+import { add, plus } from "@/utils";
+import Modal from "../Modals";
 
 export interface TasksProps {
-  // title: string;
-  // tasks: any[];
+  title: string;
+  tasks: Task[];
 }
 
-// {
-//   title, tasks;
-// }
-export const Tasks: React.FC<TasksProps> = () => {
-  const theme = useGlobalState();
+export const Tasks: React.FC<TasksProps> = ({ title, tasks }) => {
+  const { theme, isLoading, modal } = useGlobalState();
+  const { openModal } = useGlobalUpdate();
+
   return (
     <TasksStyled theme={theme}>
-      <CreateTask />
+      {modal && <Modal content={<CreateTask />} />}
+      <h1>{title}</h1>
+
+      <button
+        className="btn-rounded"
+        onClick={openModal}
+      >
+        {plus}
+      </button>
+
+      <div className="tasks grid">
+        {tasks?.map((task) => (
+          <TaskItem
+            key={task.id}
+            title={task.title}
+            description={task.description}
+            date={task.date}
+            isCompleted={task.isCompleted}
+            id={task.id}
+          />
+        ))}
+        <button
+          className="create-task"
+          onClick={openModal}
+        >
+          {add}
+          Add New Task
+        </button>
+      </div>
     </TasksStyled>
   );
 };

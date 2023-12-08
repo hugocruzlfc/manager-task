@@ -1,51 +1,87 @@
 "use client";
-import { useGlobalState } from "@/context";
+import { useGlobalState, useGlobalUpdate } from "@/context";
 import Image from "next/image";
 import React from "react";
 import styled from "styled-components";
-import { menu } from "@/utils";
+import { arrowLeft, bars, logout, menu } from "@/utils";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { UserButton, useClerk, useUser } from "@clerk/nextjs";
+import { Button } from "../Button";
 
 export interface SidebarProps {}
 
 export const Sidebar: React.FC<SidebarProps> = () => {
-  const theme = useGlobalState();
   const pathName = usePathname();
+  const { theme, collapsed } = useGlobalState();
+  const { collapseMenu } = useGlobalUpdate();
+  const router = useRouter();
+  const { signOut } = useClerk();
 
-  let collapsed = false;
+  const { user } = useUser();
+
+  const { firstName, lastName, imageUrl } = user || {
+    firstName: "",
+    lastName: "",
+    imageUrl: "",
+  };
 
   return (
     <SidebarStyled
       theme={theme}
       collapsed={collapsed}
     >
+      <button
+        className="toggle-nav"
+        onClick={collapseMenu}
+      >
+        {collapsed ? bars : arrowLeft}
+      </button>
       <div className="profile">
         <div className="profile-overlay"></div>
         <div className="image">
           <Image
-            src="/avatar1.png"
-            alt="Profile"
             width={70}
             height={70}
+            src={imageUrl}
+            alt="profile"
           />
         </div>
-        <h1>
-          <span>Sin</span>
-          <span>Rostro</span>
+        <div className="user-btn absolute z-20 top-0 w-full h-full">
+          <UserButton />
+        </div>
+        <h1 className="capitalize">
+          {firstName} {lastName}
         </h1>
       </div>
       <ul className="nav-items">
-        {menu.map((item) => (
-          <li
-            key={item.id}
-            className={`nav-item ${pathName === item.link ? "active" : ""}`}
-          >
-            {item.icon}
-            <Link href={item.link}>{item.title}</Link>
-          </li>
-        ))}
+        {menu.map((item) => {
+          const link = item.link;
+          return (
+            <li
+              key={item.id}
+              className={`nav-item ${pathName === link ? "active" : ""}`}
+            >
+              {item.icon}
+              <Link href={item.link}>{item.title}</Link>
+            </li>
+          );
+        })}
       </ul>
+      <div className="sign-out relative m-6">
+        <Button
+          name={"Sign Out"}
+          type={"submit"}
+          padding={"0.4rem 0.8rem"}
+          borderRad={"0.8rem"}
+          fw={"500"}
+          fs={"1.2rem"}
+          icon={logout}
+          click={() => {
+            signOut(() => router.push("/signin"));
+          }}
+        />
+      </div>
     </SidebarStyled>
   );
 };
