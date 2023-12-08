@@ -40,14 +40,14 @@ export const Tasks: React.FC<TasksProps> = ({ title, tasks }) => {
             id={task.id}
           />
         ))}
-        <button
-          className="create-task"
-          onClick={openModal}
-        >
-          {add}
-          Add New Task
-        </button>
       </div>
+      <button
+        className="create-task"
+        onClick={openModal}
+      >
+        {add}
+        Add New Task
+      </button>
     </TasksStyled>
   );
 };
@@ -93,6 +93,9 @@ const TasksStyled = styled.main`
 
   .tasks {
     margin: 2rem 0;
+    display: flex;
+    gap: 5rem;
+    flex-wrap: wrap;
   }
 
   > h1 {
@@ -117,6 +120,7 @@ const TasksStyled = styled.main`
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
+    width: 100%;
 
     height: 16rem;
     color: ${(props) => props.theme.colorGrey2};

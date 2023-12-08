@@ -35,10 +35,10 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
   const incompleteTasks = tasks.filter((task) => task.isCompleted === false);
 
   useEffect(() => {
-    if (user) allTasks();
+    if (user) getAllTasks();
   }, [user]);
 
-  const allTasks = async () => {
+  const getAllTasks = async () => {
     setIsLoading(true);
     try {
       const res = await axios.get<Task[]>("/api/tasks");
@@ -65,7 +65,7 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
 
       toast.success("Task updated");
 
-      allTasks();
+      getAllTasks();
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong");
@@ -79,7 +79,7 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
       if (res.data.error) return toast.error(res.data.error);
       toast.success("Task deleted");
 
-      allTasks();
+      getAllTasks();
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong");
@@ -133,6 +133,7 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
     <GlobalContext.Provider value={globalContextValue}>
       <GlobalUpdateContext.Provider
         value={{
+          getAllTasks,
           updateTask,
           deleteTask,
           toggleTheme,

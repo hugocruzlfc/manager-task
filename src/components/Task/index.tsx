@@ -20,7 +20,7 @@ export const Task: React.FC<TaskProps> = ({
   id,
 }) => {
   const { theme } = useGlobalState();
-  const { deleteTask, updateTask } = useGlobalUpdate();
+  const { deleteTask, updateTask, openModal } = useGlobalUpdate();
   return (
     <TaskStyled theme={theme}>
       <h1>{title}</h1>
@@ -46,7 +46,12 @@ export const Task: React.FC<TaskProps> = ({
             Incomplete
           </button>
         )}
-        <button className="edit">{edit}</button>
+        <button
+          className="edit"
+          onClick={openModal}
+        >
+          {edit}
+        </button>
         <button
           className="delete"
           onClick={() => {

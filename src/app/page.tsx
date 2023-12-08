@@ -5,11 +5,9 @@ import { useGlobalState } from "@/context";
 export default function Home() {
   const { tasks } = useGlobalState();
   return (
-    <main>
-      <Tasks
-        title="All Tasks"
-        tasks={tasks}
-      />
-    </main>
+    <Tasks
+      title="All Tasks"
+      tasks={tasks}
+    />
   );
 }

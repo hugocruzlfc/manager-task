@@ -3,7 +3,7 @@ import React, { ReactEventHandler, useReducer } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { Button } from "../Button";
-import { useGlobalState } from "@/context";
+import { useGlobalState, useGlobalUpdate } from "@/context";
 import { add } from "@/utils";
 import { formReducer } from "@/reducers";
 import { ActionFormReducerNames } from "@/types";
@@ -20,6 +20,7 @@ const FORM_INITIAL_STATE = {
 export const CreateTask: React.FC = () => {
   const [state, dispatch] = useReducer(formReducer, FORM_INITIAL_STATE);
   const { theme } = useGlobalState();
+  const { getAllTasks, closeModal } = useGlobalUpdate();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -67,12 +68,12 @@ export const CreateTask: React.FC = () => {
     try {
       const res = await axios.post("/api/tasks", newTask);
 
-      console.log(res);
       if (res.data.error) {
-        toast.error(res.data.error);
-        return;
+        return toast.error(res.data.error);
       }
       toast.success("Task created successfully.");
+      getAllTasks();
+      closeModal();
     } catch (err) {
       console.log(`Error in CreateTask.tsx: ${err}`);
       toast.error("Something went wrong, please try again.");
