@@ -9,4 +9,7 @@ export interface GlobalContextData {
   isLoading: boolean;
   modal: boolean;
   collapsed: boolean;
+  completedTasks: Task[];
+  incompleteTasks: Task[];
+  importantTasks: Task[];
 }

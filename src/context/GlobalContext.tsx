@@ -1,5 +1,11 @@
 "use client";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import axios from "axios";
 import { useUser } from "@clerk/nextjs";
 import { themes } from "@/content";
@@ -23,6 +29,10 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
   const { user } = useUser();
   const [tasks, setTasks] = useState<Task[]>([]);
   const theme = themes[selectedTheme];
+
+  const completedTasks = tasks.filter((task) => task.isCompleted === true);
+  const importantTasks = tasks.filter((task) => task.isImportant === true);
+  const incompleteTasks = tasks.filter((task) => task.isCompleted === false);
 
   useEffect(() => {
     if (user) allTasks();
@@ -96,16 +106,31 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
     }
   };
 
+  const globalContextValue = useMemo(
+    () => ({
+      theme,
+      tasks,
+      isLoading,
+      modal,
+      collapsed,
+      completedTasks,
+      incompleteTasks,
+      importantTasks,
+    }),
+    [
+      theme,
+      tasks,
+      isLoading,
+      modal,
+      collapsed,
+      completedTasks,
+      incompleteTasks,
+      importantTasks,
+    ]
+  );
+
   return (
-    <GlobalContext.Provider
-      value={{
-        theme,
-        tasks,
-        isLoading,
-        modal,
-        collapsed,
-      }}
-    >
+    <GlobalContext.Provider value={globalContextValue}>
       <GlobalUpdateContext.Provider
         value={{
           updateTask,

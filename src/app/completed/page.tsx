@@ -1,7 +1,16 @@
+"use client";
 import { NextPage } from "next";
+import { Tasks } from "@/components";
+import { useGlobalState } from "@/context";
 
 const Page: NextPage = () => {
-  return <div>completed</div>;
+  const { completedTasks } = useGlobalState();
+  return (
+    <Tasks
+      title="Completed Tasks"
+      tasks={completedTasks}
+    />
+  );
 };
 
 export default Page;
